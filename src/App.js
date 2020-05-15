@@ -1,26 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Switch from './switch';
+import './App.scss';
+import './switch.scss';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [switchState, setSwitchState] = React.useState(false);
+    const handleTriggerClick = () => {
+        setSwitchState(!switchState);
+    };
+
+    return (
+        <div className="App">
+            <div className="switch-demo">
+                <Switch state={switchState} title="Perturbed" triggerHandler={handleTriggerClick} options={{ width: 96, height: 44 }} />
+            </div>
+        </div>
+    );
 }
 
 export default App;
