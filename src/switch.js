@@ -158,8 +158,8 @@ export const TriState = ({ state, title, triggerHandler, options }) => {
     };
 
     return (
-        <div ref={switchRef} tabIndex="0" className={switchCss} style={switchStyles} onClick={triggerHandlerShim} onKeyUp={keyUpHandler}>
-            <div className={triggerCss} style={triggerStyles} />
+        <div ref={switchRef} tabIndex="0" role="button" aria-label={`State ${state}`} className={switchCss} style={switchStyles} onClick={triggerHandlerShim} onKeyUp={keyUpHandler}>
+            <div className={triggerCss} tabIndex="-1" style={triggerStyles} />
             <div className="sr-only">{title}</div>
         </div>
     );
