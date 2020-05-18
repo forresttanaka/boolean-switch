@@ -1,18 +1,24 @@
 import React from 'react';
-import Switch from './switch';
+import * as Switch from './switch';
 import './App.scss';
 import './switch.scss';
 
 function App() {
-    const [switchState, setSwitchState] = React.useState(false);
+    const [twoSwitchState, setTwoSwitchState] = React.useState(false);
+    const [triSwitchState, setTriSwitchState] = React.useState(0);
     const handleTriggerClick = () => {
-        setSwitchState(!switchState);
+        setTwoSwitchState(!twoSwitchState);
     };
+
+    const handleTriTriggerClick = (newSwitchState) => {
+        setTriSwitchState(newSwitchState);
+    }
 
     return (
         <div className="App">
-            <div className="switch-demo">
-                <Switch state={switchState} title="Perturbed" triggerHandler={handleTriggerClick} options={{ width: 96, height: 44 }} />
+            <div className="switch-demo-1">
+                <Switch.TwoState state={twoSwitchState} title="Perturbed" triggerHandler={handleTriggerClick} />
+                <Switch.TriState state={triSwitchState} title="Perturbed" triggerHandler={handleTriTriggerClick} />
             </div>
         </div>
     );
