@@ -70,106 +70,92 @@ TwoState.defaultProps = {
 /**
  * Renders a three-state boolean switch (on, off, neither). This keeps no internal state -- the
  * state of the switch is kept by the parent component which passes it down.
+ *
+ * The radio-button input labels exist to receive clicks and keyboard events, but they’re
+ * transparent. We use another div on top to handle the trigger animation though it receives no
+ * click events -- it's there for the animation only. It has to be positioned absolutely for the
+ * animation, but the radio-button input labels use flexbox to position themselves because
+ * absolutely positioned labels can't receive clicks.
+ *
+ * You're supposed to put radio buttons in a <fieldset> but Chrome has a bug in that flexbox
+ * doesn't work inside a <fieldset> element.
  */
-const DEFAULT_TRISTATE_WIDTH = DEFAULT_SWITCH_HEIGHT * 2;
+const DEFAULT_TRISTATE_WIDTH = DEFAULT_SWITCH_HEIGHT * 2.3;
 const DEFAULT_TRISTATE_HEIGHT = DEFAULT_SWITCH_HEIGHT;
-const KEYCODE_ARROW_DOWN = 40;
-const KEYCODE_ARROW_LEFT = 37;
-const KEYCODE_ARROW_RIGHT = 39;
-const KEYCODE_ARROW_UP = 38;
-export const TriState = ({ state, title, triggerHandler, options }) => {
-    const switchRef = React.useRef();
+export const TriState = ({ state, title, name, triggerHandler, options }) => {
+    const stateNum = +state;
     const width = options.width || DEFAULT_TRISTATE_WIDTH;
     const height = options.height || DEFAULT_TRISTATE_HEIGHT;
     const triggerSize = height - 4;
     const triggerMidSize = triggerSize / 2;
-    const sectorWidth = width / 3;
 
-    // Determine the left coordinate of the trigger based on the state.
-    let leftPos;
+    // Determine the color of the switch background and switch trigger based on the state.
     let switchColor;
-    if (state < 0) {
-        leftPos = 2;
+    let switchTriggerPosition;
+    if (stateNum < 0) {
         switchColor = '#e9e9eb';
-    } else if (state > 0) {
-        leftPos = (width - triggerSize) - 2;
+        switchTriggerPosition = 2;
+    } else if (stateNum > 0) {
         switchColor = '#65afeb';
+        switchTriggerPosition = (width - triggerSize) - 2;
     } else {
-        leftPos = (width / 2) - (triggerMidSize / 2);
         switchColor = '#ffd561';
+        switchTriggerPosition = (width / 2) - (triggerMidSize / 2);
     }
 
-    // Map the switch state to inline CSS styles.
+    // Generate the dynamic CSS styles for the switch.
     const switchStyles = {
         width,
         height,
         borderRadius: height / 2,
         backgroundColor: switchColor,
-        display: options.inline ? 'inline-block' : 'block',
+        display: options.inline ? 'inline-flex' : 'flex',
     };
-    const switchCss = `switch${options.switchCss ? ` ${options.switchCss}` : ''}`;
+    const switchCss = `tri-switch${options.switchCss ? ` ${options.switchCss}` : ''}`;
+
+    // Generate the dynamic CSS styles for the clickable labels.
+    const triggerLabelStyles = {
+        height: triggerSize,
+    };
+    const triggerLabelStylesMinus = Object.assign({}, triggerLabelStyles, { width: triggerSize, flexBasis: triggerSize, marginRight: 0, borderRadius: height / 2 });
+    const triggerLabelStylesZero = Object.assign({}, triggerLabelStyles, { width: triggerMidSize, flexBasis: triggerMidSize, marginRight: 0, marginLeft: 0, borderRadius: 2 });
+    const triggerLabelStylesPlus = Object.assign({}, triggerLabelStyles, { width: triggerSize, flexBasis: triggerSize, marginLeft: 0, borderRadius: height / 2 });
+
+    // Generate the dynamic CSS styles for the animated trigger.
+    const triggerCss = `switch-trigger${options.triggerCss ? ` ${options.triggerCss}` : ''}`;
     const triggerStyles = {
-        width: state === 0 ? triggerMidSize : triggerSize,
+        left: switchTriggerPosition,
+        width: stateNum === 0 ? triggerMidSize : triggerSize,
         height: triggerSize,
         borderRadius: state === 0 ? 2 : (height / 2) - 2,
-        top: 2,
-        left: leftPos,
-    };
-    const triggerCss = `switch-trigger${options.triggerCss ? ` ${options.triggerCss}` : ''}`;
+    }
 
-    // Need to map click position to corresponding trigger state.
+    // Send the clicked radio-button value to the parent.
     const triggerHandlerShim = (e) => {
-        // Map viewport click position to position within switch div.
-        const rect = switchRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        console.log(x);
-
-        // Divide click areas into three equal-width sectors and map those to trigger states.
-        if (x < sectorWidth) {
-            // Left third of switch.
-            triggerHandler(-1);
-        } else if (x > width - sectorWidth) {
-            // Right third of switch.
-            triggerHandler(1);
-        } else {
-            // Middle of switch.
-            triggerHandler(0);
-        }
-    };
-
-    const keyUpHandler = (e) => {
-        let newState;
-        switch (e.keyCode) {
-        case KEYCODE_ARROW_DOWN:
-        case KEYCODE_ARROW_RIGHT:
-            newState = state < 1 ? state + 1 : state;
-            break;
-        case KEYCODE_ARROW_UP:
-        case KEYCODE_ARROW_LEFT:
-            newState = state > -1 ? state - 1 : state;
-            break;
-        default:
-            newState = state;
-            break;
-        }
-        if (newState !== state) {
-            triggerHandler(newState);
-        }
+        triggerHandler(e.target.value);
     };
 
     return (
-        <div ref={switchRef} tabIndex="0" role="button" aria-label={`State ${state}`} className={switchCss} style={switchStyles} onClick={triggerHandlerShim} onKeyUp={keyUpHandler}>
-            <div className={triggerCss} tabIndex="-1" style={triggerStyles} />
-            <div className="sr-only">{title}</div>
+        <div className={switchCss} style={switchStyles}>
+            <legend className="sr-only">{title}</legend>
+            <input type="radio" name={name} id={`${name}-off`} value={-1} onChange={triggerHandlerShim} />
+            <label htmlFor={`${name}-off`} style={triggerLabelStylesMinus}><div className="sr-only">off</div></label>
+            <input type="radio" name={name} id={`${name}-none`} value={0} onChange={triggerHandlerShim} />
+            <label htmlFor={`${name}-none`} style={triggerLabelStylesZero}><div className="sr-only">none</div></label>
+            <input type="radio" name={name} id={`${name}-on`} value={1} onChange={triggerHandlerShim} />
+            <label htmlFor={`${name}-on`} style={triggerLabelStylesPlus}><div className="sr-only">on</div></label>
+            <div className={triggerCss} style={triggerStyles} />
         </div>
     );
 };
 
 TriState.propTypes = {
     /** Current state to display in the switch; >0=on, 0=neither, <0=off */
-    state: PropTypes.number.isRequired,
+    state: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     /** Title of the button for screen readers */
     title: PropTypes.string.isRequired,
+    /** Name for the switch; unique on the page like id */
+    name: PropTypes.string.isRequired,
     /** Called when the user clicks anywhere in the switch */
     triggerHandler: PropTypes.func.isRequired,
     /** Other styling options */

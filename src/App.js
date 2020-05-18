@@ -5,7 +5,7 @@ import './switch.scss';
 
 function App() {
     const [twoSwitchState, setTwoSwitchState] = React.useState(false);
-    const [triSwitchState, setTriSwitchState] = React.useState(0);
+    const [triSwitchState, setTriSwitchState] = React.useState(1);
     const handleTriggerClick = () => {
         setTwoSwitchState(!twoSwitchState);
     };
@@ -18,7 +18,7 @@ function App() {
         <div className="App">
             <div className="switch-demo-1">
                 <Switch.TwoState state={twoSwitchState} title="Perturbed" triggerHandler={handleTriggerClick} />
-                <Switch.TriState state={triSwitchState} title="Perturbed" triggerHandler={handleTriTriggerClick} />
+                <Switch.TriState state={triSwitchState} title="Perturbed" name="perturbed" triggerHandler={handleTriTriggerClick} />
             </div>
         </div>
     );
