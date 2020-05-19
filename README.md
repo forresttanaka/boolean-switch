@@ -16,3 +16,10 @@ You can then use `Switches` as a name space for the two kinds of switches this p
 <h2>Two-State Boolean Switches</h2>
 
 This type of switch simply has an on/off state.
+
+<h2>Tri-State Boolean Switches</h2>
+
+This type of switch has a third state.
+* Off — negative number
+* On — positive number
+* None — zero

@@ -14,7 +14,6 @@
     box-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }
 
-
 .tri-switch {
     position: relative;
     margin: 0;
@@ -25,10 +24,15 @@
     transition: background-color 0.2s ease;
     cursor: pointer;
 
+    .switch-trigger {
+        border: 2px solid #fff;
+    }
+
     input[type="radio"] {
+        position: absolute;
         margin: 0;
         opacity: 0;
-        width: 0;
+        cursor: pointer;
 
         + label {
             display: block;
@@ -37,6 +41,7 @@
             flex-grow: 0;
             background-color: transparent;
             cursor: pointer;
+            border: 1px solid transparent;
         }
     }
 }

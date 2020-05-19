@@ -86,10 +86,10 @@ export const TriState = ({ state, title, name, triggerHandler, options }) => {
     const stateNum = +state;
     const width = options.width || DEFAULT_TRISTATE_WIDTH;
     const height = options.height || DEFAULT_TRISTATE_HEIGHT;
-    const triggerSize = height - 4;
+    const triggerSize = height - 8;
     const triggerMidSize = triggerSize / 2;
 
-    // Determine the color of the switch background and switch trigger based on the state.
+    // Determine the color of the switch background and switch trigger position based on the state.
     let switchColor;
     let switchTriggerPosition;
     if (stateNum < 0) {
@@ -97,10 +97,10 @@ export const TriState = ({ state, title, name, triggerHandler, options }) => {
         switchTriggerPosition = 2;
     } else if (stateNum > 0) {
         switchColor = '#65afeb';
-        switchTriggerPosition = (width - triggerSize) - 2;
+        switchTriggerPosition = (width - triggerSize) - 6;
     } else {
         switchColor = '#ffd561';
-        switchTriggerPosition = (width / 2) - (triggerMidSize / 2);
+        switchTriggerPosition = (width / 2) - (triggerMidSize / 2) - 2;
     }
 
     // Generate the dynamic CSS styles for the switch.
@@ -130,6 +130,10 @@ export const TriState = ({ state, title, name, triggerHandler, options }) => {
         borderRadius: state === 0 ? 2 : (height / 2) - 2,
     }
 
+    const inputStylesMinus = { top: (height / 2) - 8, left: 4 };
+    const inputStylesZero = { top: (height / 2) - 8, left: (width / 2) - (triggerMidSize / 2) - 2 };
+    const inputStylesPlus = { top: (height / 2) - 8, left: (width - triggerSize) - 2 };
+
     // Send the clicked radio-button value to the parent.
     const triggerHandlerShim = (e) => {
         triggerHandler(e.target.value);
@@ -138,11 +142,11 @@ export const TriState = ({ state, title, name, triggerHandler, options }) => {
     return (
         <div className={switchCss} style={switchStyles}>
             <legend className="sr-only">{title}</legend>
-            <input type="radio" name={name} id={`${name}-off`} value={-1} onChange={triggerHandlerShim} />
+            <input type="radio" name={name} id={`${name}-off`} value={-1} style={inputStylesMinus} defaultChecked={state === -1} onChange={triggerHandlerShim} />
             <label htmlFor={`${name}-off`} style={triggerLabelStylesMinus}><div className="sr-only">off</div></label>
-            <input type="radio" name={name} id={`${name}-none`} value={0} onChange={triggerHandlerShim} />
+            <input type="radio" name={name} id={`${name}-none`} value={0} style={inputStylesZero} defaultChecked={state === 0} onChange={triggerHandlerShim} />
             <label htmlFor={`${name}-none`} style={triggerLabelStylesZero}><div className="sr-only">none</div></label>
-            <input type="radio" name={name} id={`${name}-on`} value={1} onChange={triggerHandlerShim} />
+            <input type="radio" name={name} id={`${name}-on`} value={1} style={inputStylesPlus} defaultChecked={state === 1} onChange={triggerHandlerShim} />
             <label htmlFor={`${name}-on`} style={triggerLabelStylesPlus}><div className="sr-only">on</div></label>
             <div className={triggerCss} style={triggerStyles} />
         </div>
