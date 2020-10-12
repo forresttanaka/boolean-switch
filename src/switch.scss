@@ -1,47 +1,35 @@
-.switch {
+.boolean-switch {
+    display: flex;
     position: relative;
-    border: none;
-    box-shadow: 0 1px 1px inset rgba(0,0,0,0.2);
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-}
-
-.switch-trigger {
-    position: absolute;
-    top: 2px;
-    background-color: #fff;
-    transition: left 0.2s ease, border-radius 0.2s ease, width 0.2s ease;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
-}
-
-.tri-switch {
-    position: relative;
-    margin: 0;
-    padding: 0;
+    padding: 2px;
     justify-content: space-between;
-    border: none;
-    box-shadow: 0 1px 1px inset rgba(0,0,0,0.2);
-    transition: background-color 0.2s ease;
     cursor: pointer;
+    border-radius: 3px;
+    border: 2px solid transparent;
 
-    .switch-trigger {
-        border: 2px solid #fff;
+    input[type='checkbox'] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
     }
 
-    input[type="radio"] {
-        position: absolute;
-        margin: 0;
-        opacity: 0;
-        cursor: pointer;
+    @at-root #{&}__frame {
+        position: relative;
+        border: none;
+        box-shadow: 0 1px 1px inset rgba(0,0,0,0.2);
+        transition: background-color 0.2s ease;
+    }
 
-        + label {
-            display: block;
-            margin: 2px;
-            flex-shrink: 1;
-            flex-grow: 0;
-            background-color: transparent;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
+    @at-root #{&}__actuator {
+        position: absolute;
+        top: 2px;
+        background-color: #fff;
+        transition: left 0.2s ease, border-radius 0.2s ease, width 0.2s ease;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    }
+
+    @at-root #{&}--focused {
+        border: 2px solid #000;
     }
 }
