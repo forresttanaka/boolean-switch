@@ -12,7 +12,12 @@ function App() {
     return (
         <div className="App">
             <div className="switch-demo-1">
-                <BooleanSwitch state={twoSwitchState} title="Plugged" triggerHandler={handleTriggerClick} options={{ height: 30, width: 58 }} />
+                <BooleanSwitch
+                    state={twoSwitchState}
+                    title="Plugged"
+                    triggerHandler={handleTriggerClick}
+                    options={{ width: 80, height: 48, cssTitle: 'title-css', cssFrame: 'frame-css', cssActuator: 'actuator-css' }}
+                />
             </div>
         </div>
     );
