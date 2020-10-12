@@ -65,10 +65,6 @@ BooleanSwitch.propTypes = {
         width: PropTypes.number,
         /** Height of switch in pixels; 22px by default */
         height: PropTypes.number,
-        /** Extra CSS classes for switch */
-        switchCss: PropTypes.string,
-        /** Extra CSS classes for switch trigger */
-        triggerCss: PropTypes.string,
     }),
 };
 
