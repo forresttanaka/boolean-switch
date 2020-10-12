@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import './switch.scss';
 
 
-const DEFAULT_SWITCH_HEIGHT = 22;
 
 /**
  * Renders a boolean switch in the style of iOS. This keeps no internal state -- the state of the
  * switch is kept by the parent component which passes it down.
  */
-const DEFAULT_TWOSTATE_WIDTH = DEFAULT_SWITCH_HEIGHT * 1.6;
-const DEFAULT_TWOSTATE_HEIGHT = DEFAULT_SWITCH_HEIGHT;
+const DEFAULT_SWITCH_HEIGHT = 22;
+const DEFAULT_SWITCH_WIDTH = DEFAULT_SWITCH_HEIGHT * 1.6;
 export const BooleanSwitch = ({ state, title, triggerHandler, options: { width, height, cssTitle, cssFrame, cssActuator } }) => {
     // True if checkbox input has focus.
     const [focused, setFocused] = React.useState(false);
@@ -30,8 +29,8 @@ export const BooleanSwitch = ({ state, title, triggerHandler, options: { width, 
     };
 
     // Calculate the inline styles for the switch and trigger.
-    const switchWidth = width || DEFAULT_TWOSTATE_WIDTH;
-    const switchHeight = height || DEFAULT_TWOSTATE_HEIGHT;
+    const switchWidth = width || DEFAULT_SWITCH_WIDTH;
+    const switchHeight = height || DEFAULT_SWITCH_HEIGHT;
     const triggerSize = switchHeight - 4;
     const switchStyles = {
         width: switchWidth,
